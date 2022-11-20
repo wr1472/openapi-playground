@@ -11,15 +11,8 @@
     ],
     "components": {
         "schemas": {
-            "Pet": {
+            "BasePet": {
                 "type": "object",
-                "discriminator": {
-                    "propertyName": "petType",
-                    "mapping": {
-                        "Cat": "#/components/schemas/Cat",
-                        "Dog": "#/components/schemas/Dog"
-                    }
-                },
                 "properties": {
                     "name": {
                         "type": "string"
@@ -34,11 +27,25 @@
                     "petType"
                 ]
             },
+            "Pet": {
+                "type": "object",
+                "discriminator": {
+                    "propertyName": "petType"
+                },
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/Cat"
+                    },
+                    {
+                        "$ref": "#/components/schemas/Dog"
+                    }
+                ]
+            },
             "Cat": {
                 "description": "A representation of a cat. Note that `Cat` will be used as the discriminator value.",
                 "allOf": [
                     {
-                    "$ref": "#/components/schemas/Pet"
+                    "$ref": "#/components/schemas/BasePet"
                     },
                     {
                     "type": "object",
@@ -65,7 +72,7 @@
                 "description": "A representation of a dog. Note that `Dog` will be used as the discriminator value.",
                 "allOf": [
                     {
-                    "$ref": "#/components/schemas/Pet"
+                    "$ref": "#/components/schemas/BasePet"
                     },
                     {
                     "type": "object",
