@@ -17,6 +17,10 @@
                     "name": {
                         "type": "string"
                     },
+                    "createDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
                     "petType": {
                         "type": "string",
                         "enum": ["Cat", "Dog"]

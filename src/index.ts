@@ -1,5 +1,6 @@
 import "source-map-support/register";
 
+import formatValidators from "ajv-formats";
 import Express from "express";
 import morgan from "morgan";
 import OpenAPIBackend, {Document, Request} from "openapi-backend";
@@ -10,10 +11,10 @@ import $RefParser from "@apidevtools/json-schema-ref-parser";
 import schema from "../api/pets.json";
 
 const pets = [
-    {name: "shitzu", "petType": "Cat", huntingSkill: "clueless"},
-    {name: "siamese", "petType": "Cat", huntingSkill: "lazy"},
-    {name: "poodle", "petType": "Dog", packSize: 3},
-    {name: "alsatian", "petType": "Dog", packSize: 1},
+    {name: "shitzu", "petType": "Cat", createdDate: new Date().toISOString(), huntingSkill: "clueless"},
+    {name: "siamese", "petType": "Cat", createdDate: new Date().toISOString(), huntingSkill: "lazy"},
+    {name: "poodle", "petType": "Dog", createdDate: new Date().toISOString(), packSize: 3},
+    {name: "alsatian", "petType": "Dog", createdDate: new Date().toISOString(), packSize: 1},
 ];
 
 (async () => {
@@ -30,6 +31,7 @@ const pets = [
         ajvOpts: {
             discriminator: true,
         },
+        customizeAjv: (ajv) => formatValidators(ajv),
         handlers: {
             getPets: async (c, req: Express.Request, res: Express.Response) => {
                 res.status(200)
