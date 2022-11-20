@@ -1,0 +1,209 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "My API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:9000/api"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "Pet": {
+                "type": "object",
+                "discriminator": {
+                    "propertyName": "petType",
+                    "mapping": {
+                        "Cat": "#/components/schemas/Cat",
+                        "Dog": "#/components/schemas/Dog"
+                    }
+                },
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "petType": {
+                        "type": "string",
+                        "enum": ["Cat", "Dog"]
+                    }
+                },
+                "required": [
+                    "name",
+                    "petType"
+                ]
+            },
+            "Cat": {
+                "description": "A representation of a cat. Note that `Cat` will be used as the discriminator value.",
+                "allOf": [
+                    {
+                    "$ref": "#/components/schemas/Pet"
+                    },
+                    {
+                    "type": "object",
+                    "properties": {
+                        "huntingSkill": {
+                        "type": "string",
+                        "description": "The measured skill for hunting",
+                        "default": "lazy",
+                        "enum": [
+                            "clueless",
+                            "lazy",
+                            "adventurous",
+                            "aggressive"
+                        ]
+                        }
+                    },
+                    "required": [
+                        "huntingSkill"
+                    ]
+                    }
+                ]
+            },
+            "Dog": {
+                "description": "A representation of a dog. Note that `Dog` will be used as the discriminator value.",
+                "allOf": [
+                    {
+                    "$ref": "#/components/schemas/Pet"
+                    },
+                    {
+                    "type": "object",
+                    "properties": {
+                        "packSize": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "the size of the pack the dog is from",
+                        "default": 0,
+                        "minimum": 0
+                        }
+                    },
+                    "required": [
+                        "packSize"
+                    ]
+                    }
+                ]
+            }
+        }
+    },
+    "paths": {
+        "/pets": {
+            "get": {
+                "operationId": "getPets",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items":{
+                                        "$ref": "#/components/schemas/Pet"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createPet",
+                "requestBody": {
+                    "description": "Create a new pet in the store",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Pet"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/cats": {
+            "get": {
+                "operationId": "getCats",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items":{
+                                        "$ref": "#/components/schemas/Cat"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createCat",
+                "requestBody": {
+                    "description": "Create a new cat in the store",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Cat"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Cat"
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/pets/{id}": {
+            "get": {
+                "operationId": "getPetById",
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "integer"
+                    }
+                }
+            ]
+        }
+    }
+}
