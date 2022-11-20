@@ -28,7 +28,7 @@
                 ]
             },
             "Pet": {
-                "type": "object",
+                "title": "Pet",
                 "discriminator": {
                     "propertyName": "petType"
                 },
@@ -42,53 +42,73 @@
                 ]
             },
             "Cat": {
+                "title": "Cat",
                 "description": "A representation of a cat. Note that `Cat` will be used as the discriminator value.",
                 "allOf": [
                     {
-                    "$ref": "#/components/schemas/BasePet"
+                        "$ref": "#/components/schemas/BasePet"
                     },
                     {
-                    "type": "object",
-                    "properties": {
-                        "huntingSkill": {
-                        "type": "string",
-                        "description": "The measured skill for hunting",
-                        "default": "lazy",
-                        "enum": [
-                            "clueless",
-                            "lazy",
-                            "adventurous",
-                            "aggressive"
+                        "type": "object",
+                        "properties": {
+                            "huntingSkill": {
+                                "type": "string",
+                                "description": "The measured skill for hunting",
+                                "default": "lazy",
+                                "enum": [
+                                    "clueless",
+                                    "lazy",
+                                    "adventurous",
+                                    "aggressive"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "huntingSkill"
                         ]
-                        }
-                    },
-                    "required": [
-                        "huntingSkill"
-                    ]
                     }
+                ],
+                "properties": {
+                    "petType": {
+                        "type": "string",
+                        "enum": ["Cat"]
+                    }
+                },
+                "required": [
+                    "petType"
                 ]
             },
             "Dog": {
+                "title": "Dog",
                 "description": "A representation of a dog. Note that `Dog` will be used as the discriminator value.",
                 "allOf": [
                     {
-                    "$ref": "#/components/schemas/BasePet"
+                        "$ref": "#/components/schemas/BasePet"
                     },
                     {
-                    "type": "object",
-                    "properties": {
-                        "packSize": {
-                        "type": "integer",
-                        "format": "int32",
-                        "description": "the size of the pack the dog is from",
-                        "default": 0,
-                        "minimum": 0
-                        }
-                    },
-                    "required": [
-                        "packSize"
-                    ]
+                        "type": "object",
+                        "properties": {
+                            "packSize": {
+                                "type": "integer",
+                                "format": "int32",
+                                "description": "the size of the pack the dog is from",
+                                "default": 0,
+                                "minimum": 0
+                            }
+                        },
+                        "required": [
+                            "packSize"
+                        ]
                     }
+                ],
+                "properties": {
+                    "petType": {
+                        "type": "string",
+                        "enum": ["Dog"]
+                    }
+                },
+                "required": [
+                    "petType"
                 ]
             }
         }

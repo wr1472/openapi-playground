@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
-    "module": "commonjs",
+    "target": "es2022",
+    "module": "NodeNext",
     "lib": [
       "es2018"
     ],
